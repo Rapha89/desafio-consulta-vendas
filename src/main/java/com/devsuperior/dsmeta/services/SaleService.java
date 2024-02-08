@@ -27,23 +27,29 @@ public class SaleService {
 		return new SaleMinDTO(entity);
 	}
 
-	public Page<SaleMinDTO> findAll(String name,
+	public Page<SaleMinDTO> findReport(String name,
 									String minDate, String maxDate, Pageable pageable) {
 
 			LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
-			LocalDate min;
-			LocalDate max;
-			if(minDate.equals("")){
-				min = today.minusYears(1L);
-			}else {
-				min = LocalDate.parse(minDate);
-			}
-			if (maxDate.equals("")){
+			LocalDate min, max;
+
+			if(minDate.equals("") && maxDate.equals("")) {
 				max = today;
-			}else {
+				min = today.minusYears(1L);
+			}
+			else if(minDate.equals("")){
+				min = LocalDate.parse(maxDate).minusYears(1L);
 				max = LocalDate.parse(maxDate);
 			}
-			LocalDate data = today.minusYears(1L);
+			else if(maxDate.equals("")){
+				max = today;
+				min = min = LocalDate.parse(minDate);
+			}
+			else{
+				min = LocalDate.parse(minDate);
+				max = LocalDate.parse(maxDate);
+			}
+
 			Page<Sale> result = repository.report12Months(min, max, name, pageable);
 			return result.map(x -> new SaleMinDTO(x));
 	}
