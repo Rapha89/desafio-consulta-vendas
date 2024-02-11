@@ -31,7 +31,9 @@ public class SaleController {
 			@RequestParam(name = "minDate", defaultValue = "") String minDate,
 			@RequestParam(name = "maxDate", defaultValue = "") String maxDate,
 			Pageable pageable) {
+
 		Page<SaleMinDTO> dto = service.findReport(name, minDate, maxDate, pageable);
+
 		return ResponseEntity.ok(dto);
 	}
 
@@ -41,6 +43,7 @@ public class SaleController {
 			@RequestParam(name = "maxDate", defaultValue = "") String maxDate) {
 
 		List<SalesSumDTO> dto = service.findSummary(minDate, maxDate);
+
 		return ResponseEntity.ok(dto);
 	}
 }
